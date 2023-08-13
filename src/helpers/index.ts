@@ -1,7 +1,8 @@
 import { store } from "../store/store"
 
+const PRESSURE_UNTITS = 0.750062
+
 export function addLocation(inputLocation: string) {
-    console.log(typeof inputLocation)
     if (inputLocation.length !== 0) {
         store.dispatch('addLocation', inputLocation)
     }
@@ -10,7 +11,6 @@ export function addLocation(inputLocation: string) {
 export function currentTime() {
     let today = new Date();
     let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    console.log(time)
     return {
         hours: today.getHours(),
         minutes: today.getMinutes()
@@ -31,8 +31,13 @@ export function sunsetSunrise(unix_timestamp: number) {
     
     // Will display time in 10:30:23 format
     var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-    console.log(formattedTime)
     return formattedTime
+}
+
+export function getPressureMm(hpa: number|undefined) {
+    if(hpa) {
+        return Math.round(hpa * PRESSURE_UNTITS)
+    }
 }
 
 

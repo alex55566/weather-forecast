@@ -9,5 +9,6 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "noImplicitAny": false,
-    }
+    },
+    "include": ["**/*.ts", "**/*.tsx", "**/*.vue", "images.d.ts", "svg.d.ts"],
   }

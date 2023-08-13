@@ -13,12 +13,6 @@
     </div>
 </template>
 
-<script lang="ts">
-export default {
-
-}
-</script>
-
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useStore } from '../store/store'
@@ -51,22 +45,20 @@ function changeLocation(value: string) {
 }
 
 function dragStartHandler(e: Event , location: ILocations) {
-    console.log('drag', location)  
     store.commit('dragStartHandler', location) 
 }
 
 function dropHandler(e: Event, location: ILocations) {
     e.preventDefault();
-    console.log('drop', location)
     store.commit('dropHandler', {event: e, loc: location}) 
     if (e.target instanceof HTMLElement) {
-        e.target.style.background = 'white'
+        e.target.style.background = 'transparent'
     }
 }
 
 function dragEndHandler(e: Event) {
     if (e.target instanceof HTMLElement) {
-        e.target.style.background = 'white'
+        e.target.style.background = 'transparent'
     }
 
 }
@@ -93,7 +85,7 @@ function dragOverHandler(e: Event ) {
     padding: 10px;
     border: 2px solid $colorBtn;
     border-radius: $borderRadius;
-    @media (max-width: 510px) {
+    @include mobile {
         flex-direction: column;
     }
     button {
@@ -101,7 +93,9 @@ function dragOverHandler(e: Event ) {
         align-items: center;
         justify-content: center;
         padding: 5px 20px;
-        background-color: $colorBtn !important;
+        background: linear-gradient(150.16deg, $colorOnahau, $colorJordyBlue) !important;
+        color: $colorWhite;
+        font-weight: 600;
         border: 1px solid transparent;
         border-radius: 20px;
         cursor: pointer;
@@ -111,8 +105,13 @@ function dragOverHandler(e: Event ) {
     input {
         border-radius: 5px;
         padding: 5px 10px;
-        border: 1px solid #81bbbd;
+        border: 1px solid $colorBtn;
         max-width: 140px;
+        outline: none
+    }
+
+    span {
+        font-weight: 600;
     }
 }
 

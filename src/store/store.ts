@@ -5,11 +5,12 @@ import { nanoid } from 'nanoid'
 export interface State {
   location: Array<{id: string, location: object, order: number}>,
   order: number,
-  showPopup: boolean,
+  isShowPopup: boolean,
   currentLocation: {id: string, location: object, order: number},
   id: string,
-  isLoader: boolean,
+  isLoad: boolean,
   isError: boolean,
+  isEmpty: boolean,
 }
 
 interface IPaylodChange {
@@ -28,11 +29,12 @@ export const store = createStore<State>({
   state: {
     location: [],
     order: 0,
-    showPopup: true,
+    isShowPopup: true,
     currentLocation: {id: '', location: {}, order: 0},
     id: '928ac46e8ffbf411e62f28f0e5d6efb9',
-    isLoader: false,
+    isLoad: false,
     isError: false,
+    isEmpty: false,
   },
   mutations: {
     addLocation(state, currentLocation: ICurrentLocation) {
@@ -44,20 +46,17 @@ export const store = createStore<State>({
   
         currentOrder = check+1
       }
-      console.log(typeof currentLocation.cod)
       if(currentLocation.cod === '404') {
         state.isError = true
       }
       if(currentLocation.cod === 200) {
         state.location.push({order: sessionStorage.getItem('locations') ? currentOrder : state.order, id: nanoid(), location: currentLocation})
         state.order++
-        console.log(state.location)
         sessionStorage.setItem('locations', JSON.stringify(state.location))
       }
     },
     deleteLocation(state, currentId: string) {
       state.location = state.location.filter(el => el.id !== currentId )
-      console.log(state.location)
       sessionStorage.setItem('locations', JSON.stringify(state.location))
     },
     changeLocation(state, payload: IPaylodChange) {
@@ -76,12 +75,16 @@ export const store = createStore<State>({
     },
 
     changePopup(state) {
-      state.showPopup = false
+      state.isShowPopup = false
+    },
+
+    changeEmpty(state, payload) {
+      state.isEmpty = payload
     },
 
     loadSession(state) {
       state.location = JSON.parse(sessionStorage.getItem('locations')!)
-      state.showPopup = false
+      state.isShowPopup = false
     },
 
     changeError(state) {
@@ -92,20 +95,16 @@ export const store = createStore<State>({
 
     dragStartHandler(state, currentLocation) {
       state.currentLocation = currentLocation
-      console.log(state.currentLocation)
     },
 
     dropHandler(state, payload) {
       state.location = state.location.map(c => {
           if(c.id === payload.loc.id) {
-              console.log('1')
               return {...c, order: state.currentLocation.order}
           }
           if(c.id === state.currentLocation.id) {
-              console.log('2')
               return {...c, order: payload.loc.order}
           }
-          console.log('3')
           return c 
       })
     },
@@ -113,11 +112,10 @@ export const store = createStore<State>({
     // ошибки, загрузка
 
     showLoader(state, load) {
-      state.isLoader = load
+      state.isLoad = load
     },
     showError(state, error) {
         state.isError = error
-        console.log('lll')
     },
   },
   actions: {
@@ -138,7 +136,6 @@ export const store = createStore<State>({
       }
     },
     async changeLocation(context, payload: IPaylodChange) {
-      console.log(payload)
       try {
         context.commit('showLoader', true)
 
@@ -167,12 +164,9 @@ export const store = createStore<State>({
           return -1
         }
       })
-      console.log('data', state.location)
       if(state.location.length) {
         sessionStorage.setItem('locations', JSON.stringify(state.location))
       }
-      
-
       return state.location
     }
   }

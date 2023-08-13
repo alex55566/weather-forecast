@@ -6,17 +6,8 @@
     </div>
 </template>
 
-<script lang="ts">
-import Weather from 'Components/Weather.vue'
-    export default {
-        name: 'BlockWeather',
-        components: {
-            Weather
-        }
-    }
-</script>
-
 <script setup lang="ts">
+import Weather from 'Components/Weather.vue'
 import { computed, ComputedRef } from 'vue';
 import { useStore } from '../store/store'
 import {ILocations} from '../interface/index'
@@ -31,18 +22,17 @@ const locations: ComputedRef<Array<ILocations>> = computed(() => store.getters.s
 
 @import 'Styles/_var.scss';
 .weathers-wrapper {
-    display: grid;
-    grid-template-columns: repeat(2,1fr) ;
-    gap: 30px;
-    @media (max-width: 1024px) {
-        display: flex;
-        flex-direction: column;
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
 }
 
 .block-weather {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     padding: 20px;
-    border: 2px solid $colorBtn;
+    background: $colorWoodSmoke;
     border-radius: $borderRadius;
 }
 </style>

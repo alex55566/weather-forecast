@@ -4,12 +4,6 @@
     </div>
 </template>
 
-<script lang="ts">
-    export default {
-        
-    }
-</script>
-
 <script setup lang="ts">
 import { onMounted, ref, computed, ComputedRef } from 'vue';
 import { useStore } from '../store/store'
@@ -43,8 +37,9 @@ function changeState() {
         padding: 20px;
         text-align: center;
         z-index: 5;
-        background-color: rgba(129, 187, 189, 0.8);
+        background: linear-gradient(150.16deg, $colorOnahau, $colorJordyBlue);
         border-radius: $borderRadius;
+        font-weight: 600;
    
     }
     .error {
